@@ -17,8 +17,6 @@ hypothesis = x_train * W + b
 # reduce_mean: 평균값을 구한다
 cost = tf.reduce_mean(tf.square(hypothesis - y_train))
 
-
-
 # GradientDescent 경사하강법
 # Minimize
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
