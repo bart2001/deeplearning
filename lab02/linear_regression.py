@@ -1,13 +1,12 @@
 import tensorflow as tf
 
-# train data
+# 학습 데이터
 x_train = [1, 2, 3]
 y_train = [1, 2, 3]
 
-# Variable: Tensorflow가 사용하는 변수, Trainable 변수
-# 기울기 변수 설정
+# Variable: Tensorflow가 사용하는 변수, Trainable Variable (학습을 통해서 구해야하는 값)
+# 기울기/절편 변수 설정
 W = tf.Variable(tf.random_normal([1]), name='weight')
-# 절편 변수 설정
 b = tf.Variable(tf.random_normal([1]), name='bias')
 
 # 가설: y = x * Weight + Bias
@@ -22,8 +21,9 @@ cost = tf.reduce_mean(tf.square(hypothesis - y_train))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 train = optimizer.minimize(cost)
 
-# Launch the grapth in a session
+# Launch the graph in a session
 sess = tf.Session()
+
 # Initializes global variables in the graph
 sess.run(tf.global_variables_initializer())
 
@@ -35,3 +35,4 @@ for step in range(2001):
     # 20번에 한번씩만 출력하기
     if step % 20 == 0:
         print(step, sess.run(cost), sess.run(W), sess.run(b))
+
