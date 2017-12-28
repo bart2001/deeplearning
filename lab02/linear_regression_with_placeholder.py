@@ -33,6 +33,6 @@ for step in range(2001):
         print(step, cost_val, W_val, b_val)
 
 # 테스트
-print(sess.run(hypothesis, feed_dict={X:[5]}))
-print(sess.run(hypothesis, feed_dict={X:[2.5]}))
-print(sess.run(hypothesis, feed_dict={X:[1.5, 3.5]}))
+print(sess.run(hypothesis, feed_dict={X: [5]}))
+print(sess.run(hypothesis, feed_dict={X: [2.5]}))
+print(sess.run(hypothesis, feed_dict={X: [1.5, 3.5]}))
