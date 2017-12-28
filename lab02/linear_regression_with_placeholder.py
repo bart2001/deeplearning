@@ -18,21 +18,30 @@ cost = tf.reduce_mean(tf.square(hypothesis - Y))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 train = optimizer.minimize(cost)
 
+
 # Launch
 sess = tf.Session()
 
 # Initialize
+
 sess.run(tf.global_variables_initializer())
 
 # 2000번 반복
 # placeholder를 사용하는 이유: 모델을 만들고 학습데이터를 던져줄 수 있다
-for step in range(2001):
+for step in range(1001):
     cost_val, W_val, b_val, _ = sess.run([cost, W, b, train]
-        , feed_dict={X: [1, 2, 3, 4, 5], Y: [2.1, 3.1, 4.1, 5.1, 6.1]})
-    if step % 20 == 0:
-        print(step, cost_val, W_val, b_val)
+        #, feed_dict={X: [1, 2, 3, 4, 5], Y: [2.1, 3.1, 4.1, 5.1, 6.1]})
+        , feed_dict={X: [1, 2, 3, 4, 5], Y: [2, 4, 6, 8, 10]})
+    if step % 100 == 0:
+        print("step=", step, "cost_val=", cost_val, "weight=", W_val, "bias=", b_val)
 
 # 테스트
 print(sess.run(hypothesis, feed_dict={X: [5]}))
 print(sess.run(hypothesis, feed_dict={X: [2.5]}))
 print(sess.run(hypothesis, feed_dict={X: [1.5, 3.5]}))
+
+'''
+지수의 과학적 표현방식
+5000 = 5 * 10^3 = 5e + 3
+0.0005 = 5 * 10^(-4) = 5e - 4
+'''
