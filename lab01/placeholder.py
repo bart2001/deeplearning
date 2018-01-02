@@ -6,7 +6,7 @@ adder_node = a + b # = tf.add(a,b)
 
 sess = tf.Session()
 
-# 값에 대한 동적할당(feeding)
+## 값에 대한 동적할당(feeding)
 print(sess.run(adder_node, feed_dict={a: 3, b: 4.5}))
 print(sess.run(adder_node, feed_dict={a: [1,3], b: [2, 4]}))
 
