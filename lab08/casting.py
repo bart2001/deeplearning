@@ -1,5 +1,10 @@
-import numpy as np
+import tensorflow as tf
 
-t = np.array([[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]])
+tf.InteractiveSession()
 
-print(t.shape)
+# casting: 원하는 형태로 형을 변환해준다
+
+print(tf.cast([1.8, 2.2, 3.3, 4.9], tf.int32).eval())
+
+print(tf.cast([True, False, 1 == 1, 0 == 1], tf.int32).eval())
+
