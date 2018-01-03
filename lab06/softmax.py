@@ -25,16 +25,22 @@ nb_classes = 3
 W = tf.Variable(tf.random_normal([4, nb_classes]), name='weight')
 b = tf.Variable(tf.random_normal([nb_classes]), name='bias')
 
-#
+# 가설: 소프트맥스 함수
 hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
 
+# 비용함수
 cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
+
+# 최소화
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
 # Launch
 with tf.Session() as sess:
+
+    # 초기화
     sess.run(tf.global_variables_initializer())
 
+    # 학습
     for step in range(2001):
         sess.run(optimizer, feed_dict={X: x_data, Y: y_data})
         if step % 200 == 0:
