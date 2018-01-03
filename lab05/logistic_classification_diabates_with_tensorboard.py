@@ -27,33 +27,28 @@ predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
 accuracy = tf.reduce_mean(tf.cast(tf.equal(Y, predicted), dtype=tf.float32))
 #accuracy = tf.reduce_mean(tf.cast(predicted == Y, dtype=tf.float32)) # 동등비교를 위해서는 반드시 tf.equal() 사용해야 함
 
-
 with tf.Session() as sess:
 
     # 텐서보드 기록
-    #w_hist = tf.summary.histogram("weights", W)
-    #b_hist = tf.summary.histogram("biases", b)
-
-    #merged = tf.summary.merge_all()
-    #writer = tf.summary.FileWriter(logdir='./logs', graph=sess.graph)
+    w_hist = tf.summary.histogram("weights", W)
+    cost_scalar = tf.summary.scalar("cost", cost)
+    accuracy_scalar = tf.summary.scalar("accuracy", accuracy)
+    summery = tf.summary.merge_all()
+    writer = tf.summary.FileWriter(logdir='./logs')
+    writer.add_graph(sess.graph)
 
     sess.run(tf.global_variables_initializer())
 
     for step in range(10001):
-        cost_val, _ = sess.run(fetches=[cost, train], feed_dict={X: x_data, Y: y_data})
+        cost_val, _, s, weight_val, bias_val = sess.run(fetches=[cost, train, summery, W, b], feed_dict={X: x_data, Y: y_data})
 
-
+        writer.add_summary(s, global_step=step)
 
         if step % 1000 == 0:
-            print('step:', step, 'cost_val:', cost_val)
+            #print('step:', step, 'cost_val:', cost_val, "weight_val:", weight_val, "bias_val:", bias_val)
+            print('step:', step, "weight_val:", weight_val, "bias_val:", bias_val)
 
     h, p, a = sess.run(fetches=[hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data})
     #print("hypothesis:", h, "\npredicted:", p)
     #정확도 출력
     print("accuracy:", a)
-
-
-
-
-
-

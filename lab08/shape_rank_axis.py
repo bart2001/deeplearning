@@ -6,9 +6,12 @@ tf.InteractiveSession()
 t = tf.constant([1, 2, 3, 4])
 print("shape:", tf.shape(t).eval())
 
-t = tf.constant([
-    [1, 2], [3, 4]
-])
+t = tf.constant(
+    [
+        [1, 2]
+        , [3, 4]
+    ]
+)
 print("shape:", tf.shape(t).eval())
 
 t = tf.constant([
