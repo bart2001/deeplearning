@@ -4,31 +4,26 @@ from tensorflow.examples.tutorials.mnist import input_data
 # 데이터 받아오기
 mnist = input_data.read_data_sets("./MNIST_data/", one_hot=True)
 
-nb_classes = 10 # 0 ~ 9까지의 숫자로 분류
+#nb_classes = 10 # 0 ~ 9까지의 숫자로 분류
 
 # 입력/출력값
-X = tf.placeholder(tf.float32, [None, 784]) # 28*28=784
-Y = tf.placeholder(tf.float32, [None, 10])
+X = tf.placeholder(tf.float32, shape=[None, 28*28]) # 28*28=784
+Y = tf.placeholder(tf.float32, shape=[None, 10])
 
+width = 70
 #layer1
-W1 = tf.Variable(tf.random_normal([784, 784]), name='weight1')
-b1 = tf.Variable(tf.random_normal([10], name='bias1'))
-layer1 = tf.sigmoid(tf.matmul(X, W1) + b1)
+W1 = tf.Variable(tf.random_normal([784, width]), name='weight1')
+b1 = tf.Variable(tf.random_normal([width], name='bias1'))
+layer1 = tf.nn.softmax(tf.matmul(X, W1) + b1)
 
-#layer2
-W2 = tf.Variable(tf.random_normal([784, 784]), name='weight2')
-b2 = tf.Variable(tf.random_normal([10], name='bias2'))
-layer2 = tf.sigmoid(tf.matmul(layer1, W2) + b2)
 
-#layer3
-W3 = tf.Variable(tf.random_normal([784, 784]), name='weight3')
+W2 = tf.Variable(tf.random_normal([width, width]), name='weight2')
+b2 = tf.Variable(tf.random_normal([width], name='bias2'))
+layer2 = tf.nn.softmax(tf.matmul(layer1, W2) + b2)
+
+W3 = tf.Variable(tf.random_normal([width, 10]), name='weight3')
 b3 = tf.Variable(tf.random_normal([10], name='bias3'))
-layer3 = tf.sigmoid(tf.matmul(layer2, W3) + b3)
-
-#hypothesis
-W4 = tf.Variable(tf.random_normal([784, 10]), name='weight4')
-b4 = tf.Variable(tf.random_normal([10], name='bias4'))
-hypothesis = tf.sigmoid(tf.matmul(layer3, W4) + b4)
+hypothesis = tf.nn.softmax(tf.matmul(layer2, W3) + b3)
 
 cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
@@ -40,7 +35,7 @@ is_correct = tf.equal(tf.arg_max(hypothesis, 1), tf.arg_max(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
 # 학습 횟수
-training_epochs = 15
+training_epochs = 20
 batch_size = 100
 
 # 학습
@@ -64,18 +59,3 @@ with tf.Session() as sess:
     # 정확도 측정 (아래의 두 개의 코드는 같은 출력을 나타냄)
     print("Accuracy=", accuracy.eval(session=sess, feed_dict={X: mnist.test.images, Y: mnist.test.labels}))
     print("Accuracy=", sess.run(accuracy, feed_dict={X: mnist.test.images, Y: mnist.test.labels}))
-
-
-    # matplot을 활용하여 출력
-    import matplotlib.pyplot as plt
-    import random
-
-    # 전체 샘플 중에서 임의로 숫자 뽑아오기
-    r = random.randint(0, mnist.test.num_examples - 1)
-    #
-    print("실제=", sess.run(tf.argmax(mnist.test.labels[r:r + 1], 1)))
-    print("예측=", sess.run(tf.argmax(hypothesis, 1), feed_dict={X: mnist.test.images[r:r + 1]}))
-
-    # 이미지 직접 보기
-    plt.imshow(mnist.test.images[r:r+1].reshape(28, 28), cmap='Greys', interpolation='nearest')
-    plt.show()

@@ -33,7 +33,7 @@ is_correct = tf.equal(tf.arg_max(hypothesis, 1), tf.arg_max(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
 # 학습 횟수
-training_epochs = 15
+training_epochs = 1
 batch_size = 100
 
 # 학습
@@ -58,6 +58,7 @@ with tf.Session() as sess:
     print("Accuracy=", accuracy.eval(session=sess, feed_dict={X: mnist.test.images, Y: mnist.test.labels}))
     print("Accuracy=", sess.run(accuracy, feed_dict={X: mnist.test.images, Y: mnist.test.labels}))
 
+    exit()
 
     # matplot을 활용하여 출력
     import matplotlib.pyplot as plt
@@ -65,7 +66,7 @@ with tf.Session() as sess:
 
     # 전체 샘플 중에서 임의로 숫자 뽑아오기
     r = random.randint(0, mnist.test.num_examples - 1)
-    # 
+    #
     print("실제=", sess.run(tf.argmax(mnist.test.labels[r:r + 1], 1)))
     print("예측=", sess.run(tf.argmax(hypothesis, 1), feed_dict={X: mnist.test.images[r:r + 1]}))
 

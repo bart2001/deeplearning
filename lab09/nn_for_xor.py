@@ -4,10 +4,10 @@ import numpy as np
 x_data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]], dtype=np.float32)
 y_data = np.array([[0], [1], [1], [0]], dtype=np.float32)
 
-X = tf.placeholder(dtype=tf.float32)
-Y = tf.placeholder(dtype=tf.float32)
-#X = tf.placeholder(dtype=tf.float32, shape=[None, 2])
-#Y = tf.placeholder(dtype=tf.float32, shape=[None, 1])
+#X = tf.placeholder(dtype=tf.float32)
+#Y = tf.placeholder(dtype=tf.float32)
+X = tf.placeholder(dtype=tf.float32, shape=[None, 2])
+Y = tf.placeholder(dtype=tf.float32, shape=[None, 1])
 
 W1 = tf.Variable(tf.random_normal([2, 2]), name='weight1')
 b1 = tf.Variable(tf.random_normal([2], name='bias1'))
