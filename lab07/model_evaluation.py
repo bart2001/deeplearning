@@ -35,5 +35,3 @@ W = tf.Variable(tf.random_normal([3, 3]))
 b = tf.Variable(tf.random_normal([3]))
 
 #hypothesis = tf.nn.softmax(tf.matmul(X))
-
-

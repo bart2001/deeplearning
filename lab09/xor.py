@@ -52,6 +52,7 @@ with tf.Session() as sess:
     print("\nHypothesis: ", h, "\nCorrect: ", c, "\nAccuracy: ", a)
 
 '''
+낮은 정확도가 나온다.
 아무리 많은 횟수를 학습해도 정확도가 낮다
 Hypothesis:  [[ 0.5]
  [ 0.5]

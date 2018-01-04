@@ -12,7 +12,7 @@
 #  11. breathes     Boolean",,,,,,,,,,,,,,,,
 #  12. venomous     Boolean",,,,,,,,,,,,,,,,
 #  13. fins     Boolean",,,,,,,,,,,,,,,,
-#  14. legs     Numeric (set of values: {0",2,4,5,6,8}),,,,,,,,,,,
+#  14. legs     Numeric (set of  values: {0",2,4,5,6,8}),,,,,,,,,,,
 #  15. tail     Boolean",,,,,,,,,,,,,,,,
 #  16. domestic     Boolean",,,,,,,,,,,,,,,,
 #  17. catsize      Boolean",,,,,,,,,,,,,,,,

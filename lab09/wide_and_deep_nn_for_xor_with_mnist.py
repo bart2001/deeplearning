@@ -2,28 +2,35 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
 # 데이터 받아오기
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+mnist = input_data.read_data_sets("./MNIST_data/", one_hot=True)
 
 nb_classes = 10 # 0 ~ 9까지의 숫자로 분류
 
 # 입력/출력값
 X = tf.placeholder(tf.float32, [None, 784]) # 28*28=784
-Y = tf.placeholder(tf.float32, [None, nb_classes])
+Y = tf.placeholder(tf.float32, [None, 10])
 
-# 가중치, 절편
-W = tf.Variable(tf.random_normal([784, nb_classes]), name='weight')
-b = tf.Variable(tf.random_normal([nb_classes]), name='bias')
+#layer1
+W1 = tf.Variable(tf.random_normal([784, 784]), name='weight1')
+b1 = tf.Variable(tf.random_normal([10], name='bias1'))
+layer1 = tf.sigmoid(tf.matmul(X, W1) + b1)
 
-# 가설, 비용함수, 최적화함수
+#layer2
+W2 = tf.Variable(tf.random_normal([784, 784]), name='weight2')
+b2 = tf.Variable(tf.random_normal([10], name='bias2'))
+layer2 = tf.sigmoid(tf.matmul(layer1, W2) + b2)
 
-#소프트맥스 함수로 분류
-#hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
-logits = tf.matmul(X, W) + b
-hypothesis = tf.nn.softmax(logits)
+#layer3
+W3 = tf.Variable(tf.random_normal([784, 784]), name='weight3')
+b3 = tf.Variable(tf.random_normal([10], name='bias3'))
+layer3 = tf.sigmoid(tf.matmul(layer2, W3) + b3)
 
-#크로스 엔트로피 비용함수로 최소가 되는 비용 계산
-#cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y))
+#hypothesis
+W4 = tf.Variable(tf.random_normal([784, 10]), name='weight4')
+b4 = tf.Variable(tf.random_normal([10], name='bias4'))
+hypothesis = tf.sigmoid(tf.matmul(layer3, W4) + b4)
+
+cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
 # 모델 테스트
@@ -65,7 +72,7 @@ with tf.Session() as sess:
 
     # 전체 샘플 중에서 임의로 숫자 뽑아오기
     r = random.randint(0, mnist.test.num_examples - 1)
-    # 
+    #
     print("실제=", sess.run(tf.argmax(mnist.test.labels[r:r + 1], 1)))
     print("예측=", sess.run(tf.argmax(hypothesis, 1), feed_dict={X: mnist.test.images[r:r + 1]}))
 
