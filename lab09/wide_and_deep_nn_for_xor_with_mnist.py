@@ -16,17 +16,18 @@ W1 = tf.Variable(tf.random_normal([784, width]), name='weight1')
 b1 = tf.Variable(tf.random_normal([width], name='bias1'))
 layer1 = tf.nn.softmax(tf.matmul(X, W1) + b1)
 
-
 W2 = tf.Variable(tf.random_normal([width, width]), name='weight2')
 b2 = tf.Variable(tf.random_normal([width], name='bias2'))
 layer2 = tf.nn.softmax(tf.matmul(layer1, W2) + b2)
 
 W3 = tf.Variable(tf.random_normal([width, 10]), name='weight3')
 b3 = tf.Variable(tf.random_normal([10], name='bias3'))
-hypothesis = tf.nn.softmax(tf.matmul(layer2, W3) + b3)
+hypothesis = tf.matmul(layer2, W3) + b3
+#hypothesis = tf.nn.softmax(tf.matmul(layer2, W3) + b3)
 
-cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
+#cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=hypothesis, labels=Y))
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.2).minimize(cost)
 
 # 모델 테스트
 is_correct = tf.equal(tf.arg_max(hypothesis, 1), tf.arg_max(Y, 1))

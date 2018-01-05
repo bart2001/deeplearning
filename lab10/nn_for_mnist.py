@@ -4,36 +4,39 @@ from tensorflow.examples.tutorials.mnist import input_data
 # 데이터 받아오기
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
-nb_classes = 10 # 0 ~ 9까지의 숫자로 분류
+tf.set_random_seed(777)  # reproducibility
 
 # 입력/출력값
-X = tf.placeholder(tf.float32, [None, 784]) # 28*28=784
-Y = tf.placeholder(tf.float32, [None, nb_classes])
+X = tf.placeholder(tf.float32, [None, 784])
+Y = tf.placeholder(tf.float32, [None, 10])
 
-# 가중치, 절편
-W = tf.Variable(tf.random_normal([784, nb_classes]), name='weight')
-b = tf.Variable(tf.random_normal([nb_classes]), name='bias')
+W1 = tf.Variable(tf.random_normal([784, 256]))
+b1 = tf.Variable(tf.random_normal([256]))
+L1 = tf.nn.relu(tf.matmul(X, W1) + b1)
 
-# 가설, 비용함수, 최적화함수
+W2 = tf.Variable(tf.random_normal([256, 256]))
+b2 = tf.Variable(tf.random_normal([256]))
+L2 = tf.nn.relu(tf.matmul(L1, W2) + b2)
 
-#소프트맥스 함수로 분류
-hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
-#logits = tf.matmul(X, W) + b
+#가설
+W3 = tf.Variable(tf.random_normal([256, 10]))
+b3 = tf.Variable(tf.random_normal([10]))
+hypothesis = tf.matmul(L2, W3) + b3
+#logits = tf.matmul(L2, W3) + b3
 #hypothesis = tf.nn.softmax(logits)
+#94%
 
 #크로스 엔트로피 비용함수로 최소가 되는 비용 계산
-cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
-#cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y))
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=hypothesis, labels=Y))
+optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 
 # 모델 테스트
 is_correct = tf.equal(tf.arg_max(hypothesis, 1), tf.arg_max(Y, 1))
-
-# 정확도 측정 (평균값)
+# 형변환(True -> 1.0)해서 평균값 구하기
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
 # 학습 횟수
-training_epochs = 1
+training_epochs = 15
 batch_size = 100
 
 # 학습
@@ -49,7 +52,7 @@ with tf.Session() as sess:
         for i in range(total_batch):
             batch_xs, batch_ys = mnist.train.next_batch(batch_size)
             cost_val, _ = sess.run([cost, optimizer], feed_dict={X: batch_xs, Y: batch_ys})
-            avg_cost = avg_cost + (cost_val / total_batch)
+            avg_cost += (cost_val / total_batch)
 
         # epoch가 진행될수록 평균비용이 감소하는 것을 볼 수 있다
         print('epoch={:02}, avg_cost={:.2f}'.format(epoch + 1, avg_cost))
@@ -69,5 +72,5 @@ with tf.Session() as sess:
     print("예측=", sess.run(tf.argmax(hypothesis, 1), feed_dict={X: mnist.test.images[r:r + 1]}))
 
     # 이미지 직접 보기
-    plt.imshow(mnist.test.images[r:r+1].reshape(28, 28), cmap='Greys', interpolation='nearest')
-    plt.show()
+    #plt.imshow(mnist.test.images[r:r+1].reshape(28, 28), cmap='Greys', interpolation='nearest')
+    #plt.show()
