@@ -47,8 +47,8 @@ class Model:
             droptout3 = tf.layers.dropout(inputs=pool3, rate=0.7
                 , training=self.training)
 
-            # flatten
-            flat = tf.reshape(droptout3, [-1, 128 * 4 * 4])
+            # Fully Connected Layer
+            flat = tf.reshape(droptout3, shape=[-1, 128 * 4 * 4])
             dense4 = tf.layers.dense(inputs=flat, units=625, activation=tf.nn.relu)
             droptout4 = tf.layers.dropout(inputs=dense4, rate=0.5, training=self.training)
 
