@@ -42,7 +42,7 @@ class Model:
             b = tf.Variable(tf.random_normal([10]))
             self.logits = tf.matmul(L2, W3) + b
 
-            # 비용함수
+            # 비용함수 계산
             self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.Y))
             self.optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(self.cost)
 
