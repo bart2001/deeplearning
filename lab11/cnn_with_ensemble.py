@@ -116,7 +116,7 @@ test_size = len(mnist.test.labels)
 predictions = np.zeros(test_size * 10).reshape(test_size, 10)
 print("init", predictions)
 
-
+# 테스트
 for m_idx, x in enumerate(models):
     print(m_idx, 'Accuracy=', m.get_accuracy(mnist.test.images, mnist.test.labels))
     p = m.predict(mnist.test.images)
@@ -125,6 +125,5 @@ for m_idx, x in enumerate(models):
 print("after", predictions)
 
 ensemble_correct_prediction = tf.equal(tf.arg_max(predictions, 1), tf.arg_max(mnist.test.labels, 1))
-ensemble_accuracy = tf.reduce_mean(tf.cast(ensemble_accuracy, tf.float32))
+ensemble_accuracy = tf.reduce_mean(tf.cast(ensemble_correct_prediction, tf.float32))
 print("Ensemble accuracy = ", sess.run(ensemble_accuracy))
-
