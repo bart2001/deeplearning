@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 sees = tf.InteractiveSession()
 image = np.array([[[[1],[2],[3]],
@@ -21,8 +21,8 @@ weight = tf.constant(
     ]
 )
 
-conv2d = tf.nn.conv2d(image, weight, strides=[1, 1, 1, 1], padding='VALID')
-conv2d_img = conv2d.eval()
+#conv2d = tf.nn.conv2d(image, weight, strides=[1, 1, 1, 1], padding='VALID')
+#conv2d_img = conv2d.eval()
 
-print("conv2d_img.shape=", conv2d_img.shape)
+#print("conv2d_img.shape=", conv2d_img.shape)
 
