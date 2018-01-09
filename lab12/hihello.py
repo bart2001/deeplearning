@@ -37,8 +37,7 @@ cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
 
 # 초기화
 initial_state = cell.zero_state(batch_size, tf.float32)
-
-outputs, _states = tf.nn.dynamic_rnn(cell=cell, inputs=X, initial_state=initial_state, dtype=tf.float32)
+outputs, states = tf.nn.dynamic_rnn(cell=cell, inputs=X, initial_state=initial_state, dtype=tf.float32)
 weights = tf.ones(shape=[batch_size, sequence_length])
 
 # 비용함수
@@ -59,8 +58,9 @@ with tf.Session() as sess:
         # 학습
         l, _ = sess.run([loss, train], feed_dict={X: x_one_hot, Y: y_data})
 
-        # 예측을 해보자
+        # 예측결과값 출력
         result = sess.run(prediction, feed_dict={X: x_one_hot})
+        print(result)
 
         if i % 100 == 0:
             print("step={}, loss={:.02f}, prediction={}, true Y={}".format(i, l, result, y_data))

@@ -19,8 +19,8 @@ sequence_length = 10
 for i in range(0, len(sentence) - sequence_length):
 
     x_str = sentence[i : i + sequence_length]
-    y_str = sentence[i + 1 : i + sequence_length - 1]
-    print(i, x_str, '->', y_str)
+    y_str = sentence[i + 1 : i + sequence_length + 1]
+    print(i, "=", x_str, '->', y_str)
 
     x = [char_dic[c] for c in x_str]
     y = [char_dic[c] for c in y_str]
@@ -28,8 +28,10 @@ for i in range(0, len(sentence) - sequence_length):
     dataX.append(x)
     dataY.append(y)
 
-print('dataX=', dataX)
-print('dataY=', dataY)
+print('dataX=', len(dataX[0]))
+print('dataY=', len(dataY[0]))
+
+#exit()
 
 batch_size = len(dataX)
 
@@ -48,13 +50,12 @@ train = tf.train.AdamOptimizer(learning_rate=0.1).minimize(loss)
 
 prediction = tf.argmax(outputs, axis=2)
 
-
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(3000):
         l, _ = sess.run([loss, train], feed_dict={X: dataX, Y: dataY})
-        #result = sess.run(prediction, feed_dict={X: dataX})
-        #result_str = [char_dic[c] for c in np.squeeze(result)]
+        result = sess.run(prediction, feed_dict={X: dataX})
+        result_str = [char_dic[c] for c in np.squeeze(result)]
 
-        #if i % 10 == 0:
-        #   print("step={}, loss={:.03f}, Prediction={}".format(i, l, ''.join(result_str)))
+        if i % 10 == 0:
+           print("step={}, loss={:.03f}, Prediction={}".format(i, l, ''.join(result_str)))
