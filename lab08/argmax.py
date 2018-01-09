@@ -10,3 +10,9 @@ x = [[0, 1, 2],
 print(tf.argmax(x, axis=0).eval())
 print(tf.argmax(x, axis=1).eval())
 print(tf.argmax(x, axis=-1).eval())
+print(tf.arg_max(x, 1).eval())
+print(tf.argmax(x, 0).eval())
+
+
+
+
