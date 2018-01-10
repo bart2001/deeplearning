@@ -12,7 +12,7 @@ sess = tf.InteractiveSession()
 hidden_size = 5 # output from the LSTM
 input_dim = 5   # one-hot encoding size 
 batch_size = 1  # one sentence (number of sentences)
-sequence_length = 6 # ihello -> 6개
+sequence_length = 6 # ihello -> 6개0
 '''
 
 # 입력/출력값
@@ -53,21 +53,21 @@ prediction = tf.argmax(outputs, axis=2)
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    for i in range(1000):
+    for i in range(100):
 
         # 학습
-        l, _ = sess.run([loss, train], feed_dict={X: x_one_hot, Y: y_data})
+        l, _ , o= sess.run([loss, train, outputs], feed_dict={X: x_one_hot, Y: y_data})
 
         # 예측결과값 출력
         result = sess.run(prediction, feed_dict={X: x_one_hot})
-        print(result)
+        #print(result)
 
         if i % 100 == 0:
             print("step={}, loss={:.02f}, prediction={}, true Y={}".format(i, l, result, y_data))
 
     # print char using dic
     result_str = [idx2char[c] for c in np.squeeze(result)]
-    print("result=", result)
-    print("np.squeeze(result)=", np.squeeze(result))
-    print("result_str=", result_str)
-    print("Prediction str:", ''.join(result_str))
+    #print("result=", result)
+    #print("np.squeeze(result)=", np.squeeze(result))
+    #print("result_str=", result_str)
+    #print("Prediction str:", ''.join(result_str))

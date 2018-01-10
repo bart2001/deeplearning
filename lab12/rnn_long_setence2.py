@@ -62,8 +62,7 @@ outputs = tf.reshape(outputs, [batch_size, sequence_length, num_classes])
 # All weights are 1 (equal weights)
 weights = tf.ones([batch_size, sequence_length])
 
-sequence_loss = tf.contrib.seq2seq.sequence_loss(
-    logits=outputs, targets=Y, weights=weights)
+sequence_loss = tf.contrib.seq2seq.sequence_loss(logits=outputs, targets=Y, weights=weights)
 mean_loss = tf.reduce_mean(sequence_loss)
 train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(mean_loss)
 
@@ -85,3 +84,13 @@ for j, result in enumerate(results):
         print(''.join([char_set[t] for t in index]), end='')
     else:
         print(char_set[index[-1]], end='')
+
+'''
+0 167 tttttttttt 3.23111
+0 168 tttttttttt 3.23111
+0 169 tttttttttt 3.23111
+…
+499 167  of the se 0.229616
+499 168 tf the sea 0.229616
+499 169   the sea. 0.229616
+'''
