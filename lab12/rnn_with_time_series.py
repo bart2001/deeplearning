@@ -1,7 +1,7 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import minmax_scale
+#from sklearn.preprocessing import MinMaxScaler
 
 # many to one (과거 6일의 데이터를 기반으로 7일째의 데이터를 예측)
 
@@ -14,7 +14,8 @@ xy = np.loadtxt('data-02-stock_daily.csv', delimiter=',')
 xy = xy[::-1] #시간순으로 revearse
 #print(xy[0])
 #print('------------')
-xy = MinMaxScaler().fit_transform(xy)   # 데이터 정규화
+xy = minmax_scale(xy)   # 데이터 정규화
+#xy = MinMaxScaler().fit_transform(xy)   # 데이터 정규화
 #print(xy[0])
 #exit(0)
 x = xy  # input=1st~5th
@@ -48,8 +49,12 @@ Y = tf.placeholder(tf.float32, [None, 1])
 
 #LSTM Cell
 cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_dim, state_is_tuple=True)
+cell = tf.contrib.rnn.MultiRNNCell([cell] * 4, state_is_tuple=True)
 outputs, _state = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)
+# Y_pred에서 마지막의 output만 쓰겠다
 Y_pred = tf.contrib.layers.fully_connected(outputs[:, -1], output_dim, activation_fn=None)
+#print(outputs[:, -1])
+#exit()
 
 #cost function
 loss = tf.reduce_sum(tf.square(Y_pred - Y))
@@ -61,11 +66,18 @@ sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
 for i in range(1000):
-    _, l = sess.run([train, loss], feed_dict={X: trainX, Y: trainY})
+    _, l, o, p = sess.run([train, loss, outputs, Y_pred], feed_dict={X: trainX, Y: trainY})
     if i % 100 == 0:
         print("step={}, loss={}".format(i, l))
+    #print()
+    #print("real_output={}\npredict={}".format(o[0], p[0]))
 
 testPredict = sess.run(Y_pred, feed_dict={X: testX})
+#print(np.mean(testY - testPredict))
+#accuracy = tf.reduce_mean(tf.cast(tf.equal(Y, predicted), dtype=tf.float32))
+
+
+import matplotlib.pyplot as plt
 plt.plot(testY)
 plt.plot(testPredict)
 plt.show()
